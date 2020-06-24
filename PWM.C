@@ -1,0 +1,38 @@
+
+
+
+#include "PWM.h"
+
+void PWM_ocr1A_init(){
+	SETBIT(TCCR1A,COM1A1);// TO ENABLE THE NON INVERTING MODE AT PIN 5 PORT D
+	SETBIT(TCCR1A,COM1B1);// TO ENABLE THE NON INVERTING MODE AT PIN 4 PORT D
+	SETBIT(TCCR1A,WGM10);//TO MAKE THE MODE 10 BIT FAST MODULATION MUST SET WGM10 11 & 12
+	SETBIT(TCCR1A,WGM11);//TO MAKE THE MODE 10 BIT FAST MODULATION MUST SET WGM10 11 & 12
+	SETBIT(TCCR1B,WGM12);//TO MAKE THE MODE 10 BIT FAST MODULATION MUST SET WGM10 11 & 12
+	SETBIT(TCCR1B,CS10);//TO MAKE THE CLOCKCYCLE NO PRESCALER
+	
+}
+void PWM_ocr1A_duty(uint16_t data){
+	
+	uint16_t pwm_data =data*(((float)1023)/((float)100));
+	if(pwm_data <300 && pwm_data>100){
+		OCR1A=1000;
+		OCR1B=0;
+	}
+	if(pwm_data <600 && pwm_data>300){
+		OCR1A=700;
+		OCR1B=300;
+	}
+	if(pwm_data<900 &&pwm_data>600){
+		OCR1A=300;
+		OCR1B=700;
+	}
+	if(pwm_data>900){
+		OCR1A=0;
+		OCR1B=1000;
+	}
+
+}
+
+// OCR1A=1024- data*(((float)1023)/((float)100));
+// OCR1B =data*(((float)1023)/((float)100));
